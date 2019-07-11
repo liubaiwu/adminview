@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="me.look.mapping.AccountMapper" >
+  <resultMap id="BaseResultMap" type="me.look.entity.Account" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="IsDelete" property="isdelete" jdbcType="TINYINT" />
+    <result column="UserName" property="username" jdbcType="VARCHAR" />
+    <result column="PassWord" property="password" jdbcType="VARCHAR" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="EmployeeId" property="employeeid" jdbcType="CHAR" />
+    <result column="AccountDeptId" property="accountdeptid" jdbcType="INTEGER" />
+    <result column="Phone" property="phone" jdbcType="VARCHAR" />
+    <result column="Email" property="email" jdbcType="VARCHAR" />
+    <result column="Qq" property="qq" jdbcType="CHAR" />
+    <result column="WeChat" property="wechat" jdbcType="VARCHAR" />
+    <result column="RoleList" property="rolelist" jdbcType="VARCHAR" />
+    <result column="LoginTime" property="logintime" jdbcType="TIMESTAMP" />
+    <result column="LockStatus" property="lockstatus" jdbcType="TINYINT" />
+    <result column="JobCode" property="jobcode" jdbcType="VARCHAR" />
+    <result column="StoreId" property="storeid" jdbcType="VARCHAR" />
+    <result column="StoreName" property="storename" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Account_Where">
+    <where>
+      <if test="username != null and username.length()>0" >and username=#{username}</if>
+      <if test="email != null and email.length()>0" >and email=#{email}</if>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, CreateTime, IsDelete, UserName, PassWord, Name, EmployeeId, AccountDeptId, Phone, 
+    Email, Qq, WeChat, RoleList, LoginTime, LockStatus, JobCode, StoreId, StoreName
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="me.look.entity.AccountExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+    <select id="select" resultMap="BaseResultMap">
+        <bind name="pagerStart" value="(Pager.PageIndex - 1) * Pager.PageSize"></bind>
+        select
+        <include refid="Base_Column_List"></include>
+        from account
+      <where>
+       1=1
+      </where>
+        limit #{pagerStart} , #{Pager.PageSize}
+    </select>
+  <select id="count" resultType="java.lang.Integer" parameterType="me.look.entity.Account">
+    select count(*) from account
+    <include refid="Account_Where"></include>
+
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from account
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from account
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="me.look.entity.AccountExample" >
+    delete from account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="me.look.entity.Account" >
+    insert into account (Id, CreateTime, IsDelete, 
+      UserName, PassWord, Name, 
+      EmployeeId, AccountDeptId, Phone, 
+      Email, Qq, WeChat, RoleList, 
+      LoginTime, LockStatus, JobCode, 
+      StoreId, StoreName)
+    values (#{id,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{isdelete,jdbcType=TINYINT},
+      #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{employeeid,jdbcType=CHAR}, #{accountdeptid,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR},
+      #{email,jdbcType=VARCHAR}, #{qq,jdbcType=CHAR}, #{wechat,jdbcType=VARCHAR}, #{rolelist,jdbcType=VARCHAR}, 
+      #{logintime,jdbcType=TIMESTAMP}, #{lockstatus,jdbcType=TINYINT}, #{jobcode,jdbcType=VARCHAR}, 
+      #{storeid,jdbcType=VARCHAR}, #{storename,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="me.look.entity.Account" >
+    insert into account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="isdelete != null" >
+        IsDelete,
+      </if>
+      <if test="username != null" >
+        UserName,
+      </if>
+      <if test="password != null" >
+        PassWord,
+      </if>
+      <if test="name != null" >
+        Name,
+      </if>
+      <if test="employeeid != null" >
+        EmployeeId,
+      </if>
+      <if test="accountdeptid != null" >
+        AccountDeptId,
+      </if>
+      <if test="phone != null" >
+        Phone,
+      </if>
+      <if test="email != null" >
+        Email,
+      </if>
+      <if test="qq != null" >
+        Qq,
+      </if>
+      <if test="wechat != null" >
+        WeChat,
+      </if>
+      <if test="rolelist != null" >
+        RoleList,
+      </if>
+      <if test="logintime != null" >
+        LoginTime,
+      </if>
+      <if test="lockstatus != null" >
+        LockStatus,
+      </if>
+      <if test="jobcode != null" >
+        JobCode,
+      </if>
+      <if test="storeid != null" >
+        StoreId,
+      </if>
+      <if test="storename != null" >
+        StoreName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdelete != null" >
+        #{isdelete,jdbcType=TINYINT},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeid != null" >
+        #{employeeid,jdbcType=CHAR},
+      </if>
+      <if test="accountdeptid != null" >
+        #{accountdeptid,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=CHAR},
+      </if>
+      <if test="wechat != null" >
+        #{wechat,jdbcType=VARCHAR},
+      </if>
+      <if test="rolelist != null" >
+        #{rolelist,jdbcType=VARCHAR},
+      </if>
+      <if test="logintime != null" >
+        #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lockstatus != null" >
+        #{lockstatus,jdbcType=TINYINT},
+      </if>
+      <if test="jobcode != null" >
+        #{jobcode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=VARCHAR},
+      </if>
+      <if test="storename != null" >
+        #{storename,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="me.look.entity.AccountExample" resultType="java.lang.Integer" >
+    select count(*) from account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update account
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.createtime != null" >
+        CreateTime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isdelete != null" >
+        IsDelete = #{record.isdelete,jdbcType=TINYINT},
+      </if>
+      <if test="record.username != null" >
+        UserName = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null" >
+        PassWord = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        Name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employeeid != null" >
+        EmployeeId = #{record.employeeid,jdbcType=CHAR},
+      </if>
+      <if test="record.accountdeptid != null" >
+        AccountDeptId = #{record.accountdeptid,jdbcType=INTEGER},
+      </if>
+      <if test="record.phone != null" >
+        Phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        Email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qq != null" >
+        Qq = #{record.qq,jdbcType=CHAR},
+      </if>
+      <if test="record.wechat != null" >
+        WeChat = #{record.wechat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rolelist != null" >
+        RoleList = #{record.rolelist,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logintime != null" >
+        LoginTime = #{record.logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lockstatus != null" >
+        LockStatus = #{record.lockstatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.jobcode != null" >
+        JobCode = #{record.jobcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storeid != null" >
+        StoreId = #{record.storeid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storename != null" >
+        StoreName = #{record.storename,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update account
+    set Id = #{record.id,jdbcType=INTEGER},
+      CreateTime = #{record.createtime,jdbcType=TIMESTAMP},
+      IsDelete = #{record.isdelete,jdbcType=TINYINT},
+      UserName = #{record.username,jdbcType=VARCHAR},
+      PassWord = #{record.password,jdbcType=VARCHAR},
+      Name = #{record.name,jdbcType=VARCHAR},
+      EmployeeId = #{record.employeeid,jdbcType=CHAR},
+      AccountDeptId = #{record.accountdeptid,jdbcType=INTEGER},
+      Phone = #{record.phone,jdbcType=VARCHAR},
+      Email = #{record.email,jdbcType=VARCHAR},
+      Qq = #{record.qq,jdbcType=CHAR},
+      WeChat = #{record.wechat,jdbcType=VARCHAR},
+      RoleList = #{record.rolelist,jdbcType=VARCHAR},
+      LoginTime = #{record.logintime,jdbcType=TIMESTAMP},
+      LockStatus = #{record.lockstatus,jdbcType=TINYINT},
+      JobCode = #{record.jobcode,jdbcType=VARCHAR},
+      StoreId = #{record.storeid,jdbcType=VARCHAR},
+      StoreName = #{record.storename,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="me.look.entity.Account" >
+    update account
+    <set >
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdelete != null" >
+        IsDelete = #{isdelete,jdbcType=TINYINT},
+      </if>
+      <if test="username != null" >
+        UserName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PassWord = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeid != null" >
+        EmployeeId = #{employeeid,jdbcType=CHAR},
+      </if>
+      <if test="accountdeptid != null" >
+        AccountDeptId = #{accountdeptid,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        Email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        Qq = #{qq,jdbcType=CHAR},
+      </if>
+      <if test="wechat != null" >
+        WeChat = #{wechat,jdbcType=VARCHAR},
+      </if>
+      <if test="rolelist != null" >
+        RoleList = #{rolelist,jdbcType=VARCHAR},
+      </if>
+      <if test="logintime != null" >
+        LoginTime = #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lockstatus != null" >
+        LockStatus = #{lockstatus,jdbcType=TINYINT},
+      </if>
+      <if test="jobcode != null" >
+        JobCode = #{jobcode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeid != null" >
+        StoreId = #{storeid,jdbcType=VARCHAR},
+      </if>
+      <if test="storename != null" >
+        StoreName = #{storename,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="me.look.entity.Account" >
+    update account
+    set CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      IsDelete = #{isdelete,jdbcType=TINYINT},
+      UserName = #{username,jdbcType=VARCHAR},
+      PassWord = #{password,jdbcType=VARCHAR},
+      Name = #{name,jdbcType=VARCHAR},
+      EmployeeId = #{employeeid,jdbcType=CHAR},
+      AccountDeptId = #{accountdeptid,jdbcType=INTEGER},
+      Phone = #{phone,jdbcType=VARCHAR},
+      Email = #{email,jdbcType=VARCHAR},
+      Qq = #{qq,jdbcType=CHAR},
+      WeChat = #{wechat,jdbcType=VARCHAR},
+      RoleList = #{rolelist,jdbcType=VARCHAR},
+      LoginTime = #{logintime,jdbcType=TIMESTAMP},
+      LockStatus = #{lockstatus,jdbcType=TINYINT},
+      JobCode = #{jobcode,jdbcType=VARCHAR},
+      StoreId = #{storeid,jdbcType=VARCHAR},
+      StoreName = #{storename,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

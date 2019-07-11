@@ -1,0 +1,41 @@
+mybatis:
+  mapper-locations: classpath:mapping/*.xml #注意：一定要对应mapper映射xml文件的所在路径
+  type-aliases-package: me.look.entity
+
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/mow?useUnicode=true&characterEncoding=utf-8&serverTimezone=CTT&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+    name: mow
+
+
+  freemarker:
+    request-context-attribute: req #req访问request
+    suffix: .html #后缀名
+    content-type: text/html
+    enabled: true
+    cache: false #缓存配置
+    template-loader-path: classpath:/templates/  #模板加载路径 按需配置
+    charset: UTF-8
+logging:
+  level:
+    me.look.mapping: debug
+  path: ./logs/
+

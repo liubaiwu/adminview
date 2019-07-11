@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title></title>
+<#include "../../lib/head.html">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <form id="form" class="layui-form layui-form-pane" action="" lay-filter="component-form-group">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="username" lay-verify="username" autocomplete="off" placeholder="请输入账号" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-inline">
+                        <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">确认密码</label>
+                        <div class="layui-input-inline">
+                            <input type="password" name="agpassword" lay-verify="required" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn" lay-submit="" lay-filter="save">保存</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<#include "../../lib/footer.html">
+<script>
+    layui.config({
+        base: '${basePath}' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function(){
+        var $ = layui.$
+            ,admin = layui.admin
+            ,element = layui.element
+            ,layer = layui.layer
+            ,form = layui.form;
+
+        form.render(null, 'component-form-group');
+
+
+        /* 自定义验证规则 */
+        form.verify({
+            username: function(value){
+                if(value.length < 5){
+                    return '账号至少得5个字符啊';
+                }
+            }
+            ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+            ,content: function(value){
+                layedit.sync(editIndex);
+            }
+        });
+
+        /* 监听提交 */
+        form.on('submit(save)', function(data){
+            $.ajaxEx({
+                type: 'post',
+                url: '${route}/admin/account/doAdd',
+                data: data.field,
+                dataType: 'json',
+                success: function (data) {
+
+                    var result = data.code;
+                    if (result == 'success') {
+
+                        layer.msg(data.message, { icon: 1 });
+                        $('#form')[0].reset()
+
+                    }
+                    else {
+                        layer.msg(data.message, { icon: 2 });
+                    }
+
+                },
+                error: ajaxError
+            });
+
+
+            return false;
+        });
+
+
+
+    });
+</script>
+</body>
+</html>
